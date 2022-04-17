@@ -1,8 +1,11 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity, View, Image,Text,ScrollView,StatusBar } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Image,Text,ScrollView,StatusBar,Dimensions } from 'react-native'
+import { Icon } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons'
 import { Audio } from 'expo-av'
-
+import { LinearGradient } from 'expo-linear-gradient'
+import { BlurView } from 'expo-blur'
+const {height, width} = Dimensions.get("window")
 
 const audioBookPlaylist = [
   {
@@ -189,17 +192,55 @@ renderFileInfo() {
 render() {
   return (
     
-    <ScrollView style={styles.container1}> 
-    
-    <View style={styles.container}>
-      <Image
-        style={styles.albumCover}
-        source={{ uri: 'https://firebasestorage.googleapis.com/v0/b/bunkan-app-8d29e.appspot.com/o/Imagenes%2Ftori1.png?alt=media&token=980dfc53-8e58-4d56-a8de-794d419879f3' }}
-      />
-      <View style={styles.controls}>
+  <View style={styles.containerprincipal}>
+    <ScrollView style={{
+            flex:1,
+            //borderWidth:1,
+            //borderColor:"red",
+            width:width
+            
+            }}
+            showsVerticalScrollIndicator={false}
+        >
+           <StatusBar translucent backgroundColor={"transparent"}/>
+
+           <View style={styles.header}>
+                <Image 
+                    source={require("./assets/audio.png")}
+                    style={styles.imagenBGheader}
+                />
+                <LinearGradient
+                        //Background Linear Gradient
+                        colors={["#333333", "transparent"]}
+                        style={styles.lg}
+                />
+                <View 
+                    style={{
+                        //borderWidth:3,
+                        borderColor:"black",
+                        top:50,
+                        left:35,
+                    }}>
+                    <TouchableOpacity 
+                        style={styles.btnBack}
+                        onPress={()=>navigation.goBack()}
+                    >
+                        <Icon
+                            name="chevron-left"
+                            type="material-community"
+                            size={25}
+                            color="#E4253F"
+                            style={{padding:0,justifyContent:'center',}}
+                        />
+                    </TouchableOpacity>
+                </View>
+                
+                <View style={styles.controls}>
+                <BlurView intensity={200} tint={'default'} style={{flex:1 ,height:125,flexDirection:"row",paddingLeft:50}}>
         <TouchableOpacity style={styles.control} onPress={this.handlePreviousTrack}>
           <Ionicons name='caret-back-outline' size={48} color='#444' />
         </TouchableOpacity>
+
         <TouchableOpacity style={styles.control} onPress={this.handlePlayPause}>
           {this.state.isPlaying ? (
             <Ionicons name='pause-circle' size={48} color='#444' />
@@ -207,13 +248,39 @@ render() {
             <Ionicons name='ios-play-circle' size={48} color='#444' />
           )}
         </TouchableOpacity>
+
         <TouchableOpacity style={styles.control} onPress={this.handleNextTrack}>
           <Ionicons name='caret-forward-outline' size={48} color='#444' />
         </TouchableOpacity>
-      </View>
-      {this.renderFileInfo()}
-    </View>
-    </ScrollView>
+
+        </BlurView>
+                </View>
+
+                
+            </View>
+
+
+
+            <View style={styles.body}>
+                <View style={{backgroundColor:"#e6cbe0", height:8, width:"18%", marginTop:15, borderRadius:10 }}/>
+                <View style={{alignItems:'center',justifyContent:'center',alignContent:'center',alignSelf:'center', }}>
+                    <Text style={styles.titulo}>聴解</Text>
+                </View>
+                <View style={{alignItems:'center',justifyContent:'center',alignContent:'center',alignSelf:'center', }}>
+                    <Text style={styles.descri}>Te sugerimos dominar hiragana y Katakana</Text>
+                    <Text style={styles.descri2}>Puedes verlo en japonés y despues español</Text>
+                    
+                </View>
+                {this.renderFileInfo()}
+            </View>
+
+          
+  
+
+        </ScrollView>
+  </View>
+     
+     
    
   )
 }
@@ -224,15 +291,54 @@ render() {
  
 // update the Stylesheet object 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
+  containerprincipal:{
+    flex:1,
+    justifyContent:'center',
+    alignContent:'center',
+    alignItems:'center',
+    alignSelf:'center',
+    width:"100%",
   },
+  header: {
+    flex:1,
+        //borderWidth:1,
+        borderColor:"black",
+        width:"100%",
+        height:517,
+        borderBottomLeftRadius:15,
+        borderBottomRightRadius:15,
+        //position:'absolute',
+        //overflow:'hidden'
+  },
+    btnBack:{
+        justifyContent:'center',
+        alignContent:'center',
+        alignItems:'center',
+        //alignSelf:'center',
+        width:74,
+        height:74,
+        borderRadius:17,
+        backgroundColor:"#FAFAFA",
+        shadowColor:"black",
+        shadowRadius:10,// sombra al raido
+        shadowOffset:{height:15},
+        shadowOpacity:0.7,// da una opacidad
+        elevation:20
+    },
   container1:{
-    backgroundColor: "#fff",
+    flex:1,
+    //borderWidth:1,
+    //borderColor:"red",
+    width:width
   },
+    imagenBGheader:{
+        width:430,
+        height:420,
+        left: -401,
+        top:-27,
+        position:'absolute',
+        marginLeft:350
+    },
   albumCover: {
     width: 250,
     height: 250
@@ -256,6 +362,31 @@ const styles = StyleSheet.create({
        // height:200
         
   },
+    body:{
+        flex:1,
+        backgroundColor:"#FEFEFE",
+        alignItems:'center',
+        //justifyContent:'center',
+        alignContent:'center',
+        alignSelf:'center',
+        //borderWidth:1,
+        borderColor:"black",
+        width:"100%",
+        top:-160,
+        borderTopRightRadius:40,
+        borderTopLeftRadius:40,
+        marginBottom:-100
+    },
+    titulo:{
+        //flex:1,
+        fontSize:30,
+        fontWeight:'bold',
+        //fontFamily:"MontserratBold",
+        letterSpacing:1,
+        marginTop:10,
+        //borderWidth:1,
+        borderColor:"black",
+    },
   smallTextAuthor:{
     paddingBottom:-45
   },
@@ -293,6 +424,38 @@ const styles = StyleSheet.create({
     margin: 20
   },
   controls: {
-    flexDirection: 'row'
-  }
+    flexDirection: 'row',
+    borderWidth:3,
+   // borderColor:"#efa9ae",
+    marginTop:185,
+    
+  },
+  lg:{
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: -300,
+    height: "100%",
+    //borderWidth:3,
+    //borderColor:"black",
+},
+    descri:{
+        //flex:1,
+        fontSize:16,
+        fontWeight:'400',
+       // fontFamily:"Arial",
+        width:"85%",
+        //borderWidth:1,
+        borderColor:"black",
+        marginTop:10
+        
+    },
+    descri2:{
+        fontSize:16,
+        fontWeight:'400',
+        width:"85%",
+        //borderWidth:1,
+        borderColor:"black",
+       // fontFamily:"Arial"
+    },
 })
